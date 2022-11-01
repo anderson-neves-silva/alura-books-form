@@ -1,21 +1,28 @@
-async function buscaEndereco(cep) {
+async function buscaEndereco(cep) {  // aqui define uma função assíncrona e o operador "await" é usado para esperar uma "promise".
     try {        
         var consultaCep = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        var consultaCepCovertida = await consultaCep.json();
+        var consultaCepCovertida = await consultaCep.json();  // convertendo o retorno do fetch em json.
+        
         if (consultaCepCovertida.erro) {
             throw Error('CEP não existente!');
         }
+        
+        var cidade = document.getElementById('cidade');  // acessando os elementos, cidade, endereço e estado pelo "id" deles.
+        var rua = document.getElementById('endereco');
+        var estado = document.getElementById('estado');
+        var bairro = document.getElementById('bairro')
+
+        cidade.value = consultaCepCovertida.localidade; // colocando automaticamente os dados no form retornados da "api"
+        rua.value = consultaCepCovertida.logradouro;
+        estado.value = consultaCepCovertida.uf;
+        bairro.value = consultaCepCovertida.bairro;
+
         console.log(consultaCepCovertida);
-        return consultaCepCovertida;
+        return consultaCepCovertida;  // retornando a variável convertida para quem chama essa função esse valor.
     } catch (erro) {
-        console.log(erro);
+        console.log(erro);  
     }
 }
 
-var cep = document.getElementById('cep');
-cep.addEventListener("focusout", () => buscaEndereco(cep.value));
-
-// linha 1, aqui define uma função assíncrona e o operador "await" é usado para esperar uma "promise".
-// linha 4, convertendo o retorno do fetch em json.
-// linha 9, retornando a variável convertida para quem chama essa função esse valor.
-// linha 15 e 16, crio uma variável que guarda o elemento cep digitado na tela pegando pelo "id" dele, e coloco um ouvinte de eventos nele de focus que quando a pessoa digitar fora desse campo ativa ele "focusout" ou focus fora, aí quando ele acontece chama a função buscaEndereco e manda o valor do cep.
+var cep = document.getElementById('cep');  // crio uma variável que guarda o elemento cep digitado na tela pegando pelo "id" dele.
+cep.addEventListener("focusout", () => buscaEndereco(cep.value));  // olocando um ouvinte de eventos em "cep" de focus que quando a pessoa digitar fora desse campo ativa ele "focusout" ou focus fora, aí quando ele acontece chama a função buscaEndereco e retorna o valor do cep.
