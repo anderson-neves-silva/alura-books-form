@@ -1,4 +1,6 @@
 async function buscaEndereco(cep) {  // aqui define uma função assíncrona e o operador "await" é usado para esperar uma "promise".
+    var mensagemErro = document.getElementById('erro');  // criando uma variável e atribuindo o elemento erro acessando pelo "id".
+    mensagemErro.innerHTML = "";  // iniciando a variável com uma mensagem vazia
     try {        
         var consultaCep = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
         var consultaCepCovertida = await consultaCep.json();  // convertendo o retorno do fetch em json.
@@ -20,6 +22,7 @@ async function buscaEndereco(cep) {  // aqui define uma função assíncrona e o
         console.log(consultaCepCovertida);
         return consultaCepCovertida;  // retornando a variável convertida para quem chama essa função esse valor.
     } catch (erro) {
+        mensagemErro.innerHTML = `<p>CEP inválido. Tente novamente!</p>`  // monstrando um erro na tela
         console.log(erro);  
     }
 }
